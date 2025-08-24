@@ -1,6 +1,7 @@
 ﻿using Crews.PlanningCenter.Auth.Configuration;
 using Crews.PlanningCenter.Auth.Models;
 using Microsoft.Extensions.Options;
+using Crews.Extensions.Http;
 
 namespace Crews.PlanningCenter.Auth;
 public class PlanningCenterAuthClient : IOAuthClient
@@ -13,9 +14,9 @@ public class PlanningCenterAuthClient : IOAuthClient
         _httpClient = httpClient;
         _options = options.Value;
 
-        _httpClient.BaseAddress = _options.BaseAddress 
+        _httpClient.SafelySetBaseAddress(_options.BaseAddress 
             ?? _httpClient.BaseAddress
-            ?? new Uri("https://api.planningcenteronline.com/oauth");
+            ?? new Uri("https://api.planningcenteronline.com/oauth"));
     }
 
     public Task<PlanningCenterOAuthTokenResponse> RefreshAccessTokenAsync(string refreshToken)
